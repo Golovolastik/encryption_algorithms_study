@@ -1,1 +1,1 @@
-# encryption_algorithms_study
+# Encryption algorithms realization for my university project
