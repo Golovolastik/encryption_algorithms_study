@@ -3,26 +3,38 @@
     <section class="input-area">
     <label>
         p
-        <input type="number" name="p" min="0" max="100">
+        <input type="number" id="prime" placeholder="Введите простое число" name="p" min="0">
     </label>
     <label>
         g
-        <input type="number" placeholder="Введите простое число" name="p" min="0" max="100">
+        <input type="number" id="base" placeholder="Введите основание" name="p" min="0">
     </label>
     <label>
         a
-        <input type="number" name="a" min="0" max="100">
+        <input type="number" id="keyA" placeholder="Введите секретный ключ A" name="a" min="0">
     </label>
     <label>
         b
-        <input type="number" name="b" min="0" max="100">
+        <input type="number" id="keyB" placeholder="Введите секретный ключ B" name="b" min="0">
     </label>
+    </section>
+    <button onclick="calculate()">Рассчитать</button>
+    <section class="result">
+        <label>
+            <b>Общий секретный ключ</b>
+            <output name="result-output" class="result-output">
+                0
+            </output>
+        </label>
     </section>
 </body>
 
 <style>
     body {
-        background-image: linear-gradient(#334c5e, 60%, #0c1216);
+        /*background-image: linear-gradient(#334c5e, 60%, #0c1216);*/
+        background-image: url("background.jpg");
+        background-color: rgba(255, 255, 255, 0.2);
+        background-blend-mode: lighten;
         font-family: Arial, Helvetica, sans-serif;
         color: azure;
     }
@@ -34,12 +46,86 @@
     .input-area {
         display: flex;
         flex-direction: column;
+        align-items: center;
     }
 
     .input-area label {
         margin: 10px;
     }
     .input-area label input {
-        width: 150px;
+        width: 200px;
+    }
+
+    button {
+        background-color: #1899D6;
+        border: solid transparent;
+        border-radius: 16px;
+        border-width: 0 0 4px;
+        color: azure;
+        display: block;
+        margin: 50px auto auto;
+        text-align: center;
+        height: 50px;
+        width: 100px;
+    }
+    button:hover {
+        background-color: #137fb2;
+    }
+    button:active {
+        border: 2px solid azure;
+    }
+    .result {
+        background-image: linear-gradient(#ffffff, 60%, #ffeac7);
+        /*background-color: white;*/
+        border: black 8px solid;
+        color: black;
+        margin: 15px;
+        padding: 7px;
+        font-size: 18px;
+    }
+    .result-output {
+        color: green;
     }
 </style>
+
+<script>
+    function calculate(){
+        let p = parseInt(document.getElementById("prime").value);
+        let g = parseInt(document.getElementById("base").value);
+        let a = parseInt(document.getElementById("keyA").value);
+        let b = parseInt(document.getElementById("keyB").value);
+
+        if (!isPrime(p)) {
+            alert("Введите простое число!");
+        }
+        let result = commonKey(keyB(p, g, b), a, p);
+
+        let outputElement = document.querySelector('.result-output');
+        outputElement.textContent = result;
+    }
+    function isPrime(number) {
+        if (number < 2) {
+            return false;
+        }
+
+        for (let i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i === 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function keyA(p, g, a) {
+        let A = g ** a % p;
+        return A;
+    }
+    function keyB(p, g, b) {
+        let B = (g ** b) % p;
+        return B;
+    }
+    function commonKey(keyB, a, p) {
+        let key = (keyB ** a) % p;
+        return key;
+    }
+</script>
